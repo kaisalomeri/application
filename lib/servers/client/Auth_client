@@ -1,0 +1,57 @@
+import 'package:dio/dio.dart';
+
+class AuthService {
+  Dio dio = Dio();
+
+  // عنوان الـ API الخاص بالتسجيل
+  final String registerUrl = 'https://example.com/api/register';
+  final String loginUrl = 'https://example.com/api/login';
+
+  // دالة للتسجيل
+  Future<Response?> registerUser({
+    required String name,
+    required String email,
+    required String password,
+    required String phone,
+    required String city,
+  }) async {
+    try {
+      // إرسال الطلب مع البيانات
+      Response response = await dio.post(
+        registerUrl,
+        data: {
+          'name': name,
+          'email': email,
+          'password': password,
+          'password_confirmation': password,
+          'phone': phone,
+          'city': city,
+        },
+      );
+      return response;
+    } on DioError catch (e) {
+      print(e.response?.data);
+      return e.response;
+    }
+  }
+
+  // دالة لتسجيل الدخول
+  Future<Response?> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      Response response = await dio.post(
+        loginUrl,
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
+      return response;
+    } on DioError catch (e) {
+      print(e.response?.data);
+      return e.response;
+    }
+  }
+}
